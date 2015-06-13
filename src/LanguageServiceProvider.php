@@ -24,6 +24,18 @@ class LanguageServiceProvider extends ServiceProvider
     }
 
     /**
+     * Perform post-registration booting of services.
+     *
+     * @return void
+     */
+    public function boot()
+    {
+        $this->publishes([
+            __DIR__.'/database/migrations/' => database_path('/migrations')
+        ], 'migrations');
+    }
+
+    /**
      * @return array
      */
     public function provides()
