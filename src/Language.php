@@ -130,7 +130,7 @@ class Language
         });
 
         if ($value === false) {
-            return "$group::$name";
+            return ['value' => "$group::$name"];
         }
 
         return $this->values[$value];
