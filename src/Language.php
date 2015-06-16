@@ -58,6 +58,20 @@ class Language
         return $value['value'];
     }
 
+    public function getAndSetForFirstLanguage($constantName, $constantValue)
+    {
+        list($group, $name) = $this->splitName($constantName);
+
+        $value = $this->findByGroupAndName($group, $name);
+
+        if ($value['value'] === "$group::$name") {
+            $this->createConstantForFirstLanguage($group, $name, $constantValue);
+            return $constantValue;
+        }
+
+        return $value['value'];
+    }
+
 
     /**
      * @param $languageId
@@ -134,5 +148,18 @@ class Language
         }
 
         return $this->values[$value];
+    }
+
+    private function createConstantForFirstLanguage($group, $name, $constantValue)
+    {
+        // Find first language
+        $language = LanguageModel::find(1);
+        if ($language === null) {
+            return false;
+        }
+
+        $constant = Constant::create(['group' => $group, 'name' => $name]);
+        $value = Value::create(['constant_id' => $constant->id, 'language_id' => $language->id, 'value' => $constantValue]);
+        return true;
     }
 }
