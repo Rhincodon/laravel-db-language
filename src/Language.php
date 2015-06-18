@@ -65,7 +65,7 @@ class Language
 
         $value = $this->findByGroupAndName($group, $name);
 
-        if ($value['value'] === "$group::$name") {
+        if ($value['value'] === "$group::$name" && $this->language->id == 1) {
             $this->createConstantForFirstLanguage($group, $name, $constantValue);
             return $constantValue;
         }
@@ -163,7 +163,13 @@ class Language
             return false;
         }
         $constant = Constant::create(['group' => $group, 'name' => $name]);
-        $value = Value::create(['constant_id' => $constant->id, 'language_id' => $this->language->id, 'value' => $constantValue]);
+        $value = Value::create(
+            [
+                'constant_id' => $constant->id,
+                'language_id' => $this->language->id,
+                'value' => $constantValue
+            ]
+        );
         return $value;
     }
 }
