@@ -38,10 +38,6 @@ class Language
     {
         $this->language = LanguageModel::find($languageId);
 
-        if (!$this->language) {
-            throw new ErrorException('No language provided');
-        }
-
         $this->values = $this->loadConstants($languageId, $constantGroup);
     }
 
@@ -58,6 +54,11 @@ class Language
         return $value['value'];
     }
 
+    /**
+     * @param $constantName
+     * @param $constantValue
+     * @return mixed
+     */
     public function getAndSetForFirstLanguage($constantName, $constantValue)
     {
         list($group, $name) = $this->splitName($constantName);
@@ -150,9 +151,15 @@ class Language
         return $this->values[$value];
     }
 
+    /**
+     * @param $group
+     * @param $name
+     * @param $constantValue
+     * @return bool|static
+     */
     private function createConstantForFirstLanguage($group, $name, $constantValue)
     {
-        if ($this->language->id !== 1) {
+        if (!$this->language || $this->language->id !== 1) {
             return false;
         }
         $constant = Constant::create(['group' => $group, 'name' => $name]);
