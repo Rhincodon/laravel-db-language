@@ -42,6 +42,19 @@ class Language
     }
 
     /**
+     * @param null $field
+     * @return mixed
+     */
+    public function language($field = null)
+    {
+        if ($field) {
+            return $this->language[$field];
+        }
+
+        return $this->language;
+    }
+
+    /**
      * @param $constantName
      * @return mixed
      */
@@ -67,6 +80,7 @@ class Language
 
         if ($value['value'] === "$group::$name" && $this->language->id == 1) {
             $this->createConstantForFirstLanguage($group, $name, $constantValue);
+
             return $constantValue;
         }
 
@@ -170,6 +184,7 @@ class Language
                 'value' => $constantValue
             ]
         );
+
         return $value;
     }
 }
