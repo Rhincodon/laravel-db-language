@@ -152,14 +152,11 @@ class Language
 
     private function createConstantForFirstLanguage($group, $name, $constantValue)
     {
-        // Find first language
-        $language = LanguageModel::find(1);
-        if ($language === null) {
+        if ($this->language->id !== 1) {
             return false;
         }
-
         $constant = Constant::create(['group' => $group, 'name' => $name]);
-        $value = Value::create(['constant_id' => $constant->id, 'language_id' => $language->id, 'value' => $constantValue]);
-        return true;
+        $value = Value::create(['constant_id' => $constant->id, 'language_id' => $this->language->id, 'value' => $constantValue]);
+        return $value;
     }
 }
