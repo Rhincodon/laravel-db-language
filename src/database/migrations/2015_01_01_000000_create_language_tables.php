@@ -12,6 +12,13 @@ class CreateLanguageTables extends Migration
      */
     public function up()
     {
+        Schema::create('language_constants', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name');
+            $table->string('group');
+            $table->softDeletes();
+        });
+
         Schema::create('languages', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name')->unique();
@@ -19,13 +26,6 @@ class CreateLanguageTables extends Migration
             $table->string('uri_prefix')->unique();
             $table->string('description')->nullable();
             $table->string('datetime_format')->nullable();
-            $table->softDeletes();
-        });
-
-        Schema::create('language_constants', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('name');
-            $table->string('group');
             $table->softDeletes();
         });
 
@@ -51,8 +51,8 @@ class CreateLanguageTables extends Migration
      */
     public function down()
     {
-        Schema::drop('language_constant_values');
-        Schema::drop('languages');
         Schema::drop('language_constants');
+        Schema::drop('languages');
+        Schema::drop('language_constant_values');
     }
 }
