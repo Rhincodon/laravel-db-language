@@ -173,7 +173,7 @@ class Language
      */
     private function createConstantForFirstLanguage($group, $name, $constantValue)
     {
-        if (!$this->language || $this->language->id !== 1) {
+        if (!$this->language || $this->language->id != 1) {
             return false;
         }
         $constant = Constant::create(['group' => $group, 'name' => $name]);
