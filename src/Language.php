@@ -185,6 +185,8 @@ class Language
             ]
         );
 
+        $this->values->push(['group' => $group, 'name' => $name, 'value' => $constantValue]);
+
         return $value;
     }
 }
