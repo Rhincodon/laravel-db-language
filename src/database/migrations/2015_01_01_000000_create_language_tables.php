@@ -30,6 +30,7 @@ class CreateLanguageTables extends Migration
         });
 
         Schema::create('language_constant_values', function (Blueprint $table) {
+            $table->increments('id');
             $table->integer('constant_id')->unsigned();
             $table->integer('language_id')->unsigned();
 
