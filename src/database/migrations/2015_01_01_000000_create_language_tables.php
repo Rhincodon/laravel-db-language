@@ -50,8 +50,8 @@ class CreateLanguageTables extends Migration
      */
     public function down()
     {
-        Schema::drop('language_constants');
-        Schema::drop('languages');
         Schema::drop('language_constant_values');
+        Schema::drop('languages');
+        Schema::drop('language_constants');
     }
 }
