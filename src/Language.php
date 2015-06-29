@@ -154,6 +154,10 @@ class Language
      */
     private function findByGroupAndName($group, $name)
     {
+        if (!$this->values) {
+            return ['value' => "$group::$name"];
+        }
+
         $value = $this->values->search(function ($item) use ($group, $name) {
             return $item['group'] == $group && $item['name'] == $name;
         });
