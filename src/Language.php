@@ -74,6 +74,10 @@ class Language
      */
     public function getAndSetForFirstLanguage($constantName, $constantValue)
     {
+        if (! $this->language) {
+            $this->load(1);
+        }
+
         list($group, $name) = $this->splitName($constantName);
 
         $value = $this->findByGroupAndName($group, $name);
