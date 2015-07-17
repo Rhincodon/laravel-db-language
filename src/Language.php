@@ -2,9 +2,7 @@
 
 namespace Rhinodontypicus\DBLanguage;
 
-use Cache;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Http\Request;
 use Psy\Exception\ErrorException;
 use Rhinodontypicus\DBLanguage\Models\Constant;
 use Rhinodontypicus\DBLanguage\Models\Language as LanguageModel;
@@ -22,18 +20,11 @@ class Language
     protected $values;
 
     /**
-     * @var bool
+     *
      */
-    protected $dontLoad = false;
-
-    /**
-     * @param Request $request
-     */
-    public function __construct(Request $request)
+    public function __construct()
     {
-        if (strpos($request->path(), 'stock-photos') !== false) {
-            $this->dontLoad = true;
-        };
+
     }
 
     /**
@@ -83,7 +74,7 @@ class Language
      */
     public function getAndSetForFirstLanguage($constantName, $constantValue)
     {
-        if (!$this->language) {
+        if (! $this->language) {
             $this->load(1);
         }
 
@@ -115,12 +106,10 @@ class Language
 
         $constantsIds = Constant::where($where)->lists('id')->all();
 
-        $constantValues = Cache::remember('constant_values', 60, function () use ($languageId, $constantsIds) {
-            return Value::with('constant')
-                ->where('language_id', $languageId)
-                ->whereIn('constant_id', $constantsIds)
-                ->get();
-        });
+        $constantValues = Value::with('constant')
+            ->where('language_id', $languageId)
+            ->whereIn('constant_id', $constantsIds)
+            ->get();
 
         $constantValues = $this->parseValuesCollection($constantValues);
 
@@ -207,19 +196,5 @@ class Language
         $this->values->push(['group' => $group, 'name' => $name, 'value' => $constantValue]);
 
         return $value;
-    }
-
-
-    /**
-     * @param $method
-     * @param $arguments
-     */
-    public function __call($method, $arguments)
-    {
-        if (method_exists($this, $method)) {
-            if (!$this->dontLoad) {
-                call_user_func_array(array($this, $method), $arguments);
-            }
-        }
     }
 }
