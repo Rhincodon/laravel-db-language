@@ -2,10 +2,9 @@
 
 namespace Rhinodontypicus\DBLanguage\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Language extends Model
+class Language extends \Eloquent
 {
     use SoftDeletes;
     /**
@@ -29,9 +28,12 @@ class Language extends Model
      */
     protected $table = 'languages';
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function values()
     {
-        return $this->hasMany('Rhinodontypicus\DBLanguage\Models\Value');
+        return $this->hasMany(Value::class);
     }
 
     /**

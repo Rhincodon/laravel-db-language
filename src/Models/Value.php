@@ -2,9 +2,7 @@
 
 namespace Rhinodontypicus\DBLanguage\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
-class Value extends Model
+class Value extends \Eloquent
 {
     /**
      * Disable updated_at and created_at columns
@@ -27,13 +25,19 @@ class Value extends Model
      */
     protected $table = 'language_constant_values';
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function constant()
     {
-        return $this->belongsTo('Rhinodontypicus\DBLanguage\Models\Constant');
+        return $this->belongsTo(Constant::class);
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function language()
     {
-        return $this->belongsTo('Rhinodontypicus\DBLanguage\Models\Language');
+        return $this->belongsTo(Language::class);
     }
 }

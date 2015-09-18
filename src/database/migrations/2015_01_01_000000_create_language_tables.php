@@ -15,15 +15,15 @@ class CreateLanguageTables extends Migration
         Schema::create('language_constants', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->string('group');
+            $table->string('group')->nullable();
             $table->softDeletes();
         });
 
         Schema::create('languages', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name')->unique();
-            $table->string('code')->unique();
-            $table->string('uri_prefix')->unique();
+            $table->string('code')->unique()->nullable();
+            $table->string('uri_prefix')->unique()->nullable();
             $table->string('description')->nullable();
             $table->string('datetime_format')->nullable();
             $table->softDeletes();
@@ -35,11 +35,11 @@ class CreateLanguageTables extends Migration
             $table->integer('language_id')->unsigned()->index();
 
             $table->foreign('constant_id')->references('id')->on('language_constants')
-                ->onUpdate('cascade')->onDelete('cascade');
+                  ->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('language_id')->references('id')->on('languages')
-                ->onUpdate('cascade')->onDelete('cascade');
+                  ->onUpdate('cascade')->onDelete('cascade');
 
-            $table->string('value');
+            $table->string('value')->nullable();
         });
     }
 

@@ -15,17 +15,9 @@ class Language
      */
     protected $language;
     /**
-     * @var
+     * @var Collection
      */
     protected $values;
-
-    /**
-     *
-     */
-    public function __construct()
-    {
-
-    }
 
     /**
      * Load language constants with values by languageId and group
@@ -36,7 +28,7 @@ class Language
      */
     public function load($languageId, $constantGroup = null)
     {
-        $this->language = LanguageModel::find($languageId);
+        $this->language = LanguageModel::findOrFail($languageId);
 
         $this->values = $this->loadConstants($languageId, $constantGroup);
     }
@@ -97,7 +89,7 @@ class Language
      * @param $constantGroup
      * @return mixed
      */
-    private function loadConstants($languageId, $constantGroup)
+    private function loadConstants($languageId, $constantGroup = null)
     {
         $where = [];
         if ($constantGroup) {
@@ -134,11 +126,11 @@ class Language
 
     /**
      * @param $constantValues
-     * @return Collection
+     * @return Collection $result
      */
     private function parseValuesCollection($constantValues)
     {
-        $result = new Collection();
+        $result = collect([]);
         foreach ($constantValues as $value) {
             $value = [
                 'name' => $value->constant->name,
