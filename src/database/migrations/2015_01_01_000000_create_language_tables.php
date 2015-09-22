@@ -39,7 +39,7 @@ class CreateLanguageTables extends Migration
             $table->foreign('language_id')->references('id')->on('languages')
                   ->onUpdate('cascade')->onDelete('cascade');
 
-            $table->string('value')->nullable();
+            $table->text('value')->nullable();
         });
     }
 
