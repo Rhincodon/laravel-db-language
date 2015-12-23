@@ -20,7 +20,7 @@ class LanguageServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton('db.language', 'Rhinodontypicus\DBLanguage\Language');
+        $this->app->singleton('db.language', Language::class);
     }
 
     /**
