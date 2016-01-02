@@ -96,7 +96,7 @@ class Language
             $where = ['group' => $constantGroup];
         }
 
-        $constantsIds = Constant::where($where)->lists('id')->all();
+        $constantsIds = Constant::where($where)->pluck('id')->all();
 
         $constantValues = Value::with('constant')
             ->where('language_id', $languageId)
