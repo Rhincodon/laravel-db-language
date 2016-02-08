@@ -8,12 +8,13 @@ use Rhinodontypicus\DBLanguage\Models\Constant;
 use Rhinodontypicus\DBLanguage\Models\Language as LanguageModel;
 use Rhinodontypicus\DBLanguage\Models\Value;
 
-class Language
+class DbLanguage
 {
     /**
      * @var
      */
     protected $language;
+
     /**
      * @var Collection
      */
@@ -67,14 +68,14 @@ class Language
     public function getAndSetForFirstLanguage($constantName, $constantValue)
     {
         if (! $this->language) {
-            $this->load(1);
+            $this->load(config('laravel-db-language.defaultLanguageId'));
         }
 
         list($group, $name) = $this->splitName($constantName);
 
         $value = $this->findByGroupAndName($group, $name);
 
-        if ($value['value'] === "$group::$name" && $this->language->id == 1) {
+        if ($value['value'] === "$group::$name" && $this->language->id == config('laravel-db-language.defaultLanguageId')) {
             $this->createConstantForFirstLanguage($group, $name, $constantValue);
 
             return $constantValue;

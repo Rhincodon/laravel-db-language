@@ -2,11 +2,13 @@
 
 namespace Rhinodontypicus\DBLanguage\Models;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Constant extends \Eloquent
+class Constant extends Model
 {
     use SoftDeletes;
+
     /**
      * Disable updated_at and created_at columns
      *

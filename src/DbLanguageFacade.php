@@ -4,7 +4,7 @@ namespace Rhinodontypicus\DBLanguage;
 
 use Illuminate\Support\Facades\Facade;
 
-class LanguageFacade extends Facade
+class DbLanguageFacade extends Facade
 {
     /**
      * Get the registered name of the component.
@@ -13,6 +13,6 @@ class LanguageFacade extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'db.language';
+        return DbLanguage::class;
     }
 }

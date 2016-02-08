@@ -2,7 +2,9 @@
 
 namespace Rhinodontypicus\DBLanguage\Models;
 
-class Value extends \Eloquent
+use Illuminate\Database\Eloquent\Model;
+
+class Value extends Model
 {
     /**
      * Disable updated_at and created_at columns
