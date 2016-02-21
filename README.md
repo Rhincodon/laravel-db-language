@@ -46,8 +46,6 @@ db_language('site::some_constant', 'Default Value'); // Get language constant wi
 db_language()->language(); // Get current loaded language
 db_language()->language('name'); // Current loaded language field
 ```
-Somewhere in your middleware/controller/etc
-
 
 ## Credits
 
