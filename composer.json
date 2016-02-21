@@ -1,49 +1,50 @@
 {
-    "name": "rhincodon/laravel-db-language",
-    "description": "Laravel 5.1 Database Language",
-    "keywords": [
-        "laravel",
-        "localization",
-        "language"
-    ],
-    "homepage": "https://github.com/rhincodon/laravel-db-language",
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "rhinodontypicus",
-            "email": "rhinodontypicus@gmail.com",
-            "homepage": "http://laravelinfo.com",
-            "role": "Developer"
-        }
-    ],
-    "require": {
-        "php" : ">=5.5.9",
-        "illuminate/support": "~5.1",
-        "illuminate/database": "~5.1"
-    },
-    "require-dev": {
-        "phpunit/phpunit" : "4.*",
-        "scrutinizer/ocular": "~1.1"
-    },
-    "autoload": {
-        "psr-4": {
-            "Rhinodontypicus\\DBLanguage\\": "src"
-        },
-        "files": [
-            "src/helpers.php"
-        ]
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Rhinodontypicus\\DBLanguage\\Test\\": "tests"
-        }
-    },
-    "scripts": {
-        "test": "phpunit"
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "1.0-dev"
-        }
+  "name": "rhincodon/laravel-db-language",
+  "description": "Laravel 5.1 Database Language",
+  "keywords": [
+    "laravel",
+    "localization",
+    "language"
+  ],
+  "homepage": "https://github.com/rhincodon/laravel-db-language",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "rhinodontypicus",
+      "email": "rhinodontypicus@gmail.com",
+      "homepage": "http://laravelinfo.com",
+      "role": "Developer"
     }
+  ],
+  "require": {
+    "php": ">=5.5.9",
+    "illuminate/support": "~5.1",
+    "illuminate/database": "~5.1"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "4.*",
+    "scrutinizer/ocular": "~1.1",
+    "orchestra/testbench": "^3.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Rhinodontypicus\\DBLanguage\\": "src"
+    },
+    "files": [
+      "src/helpers.php"
+    ]
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Rhinodontypicus\\DBLanguage\\Test\\": "tests"
+    }
+  },
+  "scripts": {
+    "test": "phpunit"
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "1.0-dev"
+    }
+  }
 }
