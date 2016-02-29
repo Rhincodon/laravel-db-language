@@ -72,4 +72,26 @@ class DBLanguageTest extends TestCase
         $this->assertEquals("cms::test", db_language()->get('cms::test'));
         $this->assertEquals("Test", db_language()->get('site::test'));
     }
+
+    /**
+     * @test
+     */
+    public function it_does_not_create_constant_twice()
+    {
+        db_language()->load($this->languages[0]->id);
+        db_language("site::const", "Test");
+        db_language("site::const", "Test");
+
+        $this->seeInDatabase("language_constants", [
+            "id" => 1,
+            "name"  => "const",
+            "group" => "site",
+        ]);
+
+        $this->dontSeeInDatabase("language_constants", [
+            "id" => 2,
+            "name"  => "const",
+            "group" => "site",
+        ]);
+    }
 }

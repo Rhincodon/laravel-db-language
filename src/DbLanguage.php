@@ -174,10 +174,11 @@ class DbLanguage
      */
     private function createConstantForFirstLanguage($group, $name, $constantValue)
     {
-        if (!$this->language || $this->language->id != 1) {
+        if (!$this->language || $this->language->id != config('laravel-db-language.defaultLanguageId')) {
             return false;
         }
-        $constant = Constant::create(['group' => $group, 'name' => $name]);
+
+        $constant = Constant::firstOrCreate(['group' => $group, 'name' => $name]);
         $value = Value::create(
             [
                 'constant_id' => $constant->id,
