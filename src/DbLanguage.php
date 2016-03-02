@@ -5,7 +5,6 @@ namespace Rhinodontypicus\DBLanguage;
 use Illuminate\Database\Eloquent\Collection;
 use Psy\Exception\ErrorException;
 use Rhinodontypicus\DBLanguage\Models\Constant;
-use Rhinodontypicus\DBLanguage\Models\Language as LanguageModel;
 use Rhinodontypicus\DBLanguage\Models\Value;
 
 class DbLanguage
@@ -23,15 +22,31 @@ class DbLanguage
     /**
      * Load language constants with values by languageId and group
      *
-     * @param $languageId
+     * @param      $languageId
      * @param null $constantGroup
-     * @throws ErrorException
+     * @return bool
      */
     public function load($languageId, $constantGroup = null)
     {
-        $this->language = LanguageModel::findOrFail($languageId);
+        $query = \DB::table('languages')
+            ->where('languages.id', $languageId)
+            ->leftJoin('language_constant_values', 'languages.id', '=', 'language_constant_values.language_id')
+            ->leftJoin('language_constants', 'language_constant_values.constant_id', '=', 'language_constants.id')
+            ->select('languages.*', 'language_constant_values.value', 'language_constants.group', 'language_constants.name as group_name');
 
-        $this->values = $this->loadConstants($languageId, $constantGroup);
+        if ($constantGroup) {
+            $query->where('language_constants.group', $constantGroup);
+        }
+
+        $data = $query->get();
+
+        if (!$data) {
+            return false;
+        }
+
+        $this->language = $data[0];
+        $this->values = collect($data);
+        return true;
     }
 
     /**
@@ -41,7 +56,7 @@ class DbLanguage
     public function language($field = null)
     {
         if ($field) {
-            return $this->language[$field];
+            return $this->language->{$field};
         }
 
         return $this->language;
@@ -57,7 +72,7 @@ class DbLanguage
 
         $value = $this->findByGroupAndName($group, $name);
 
-        return $value['value'];
+        return $value->value;
     }
 
     /**
@@ -75,40 +90,14 @@ class DbLanguage
 
         $value = $this->findByGroupAndName($group, $name);
 
-        if ($value['value'] === "$group::$name" && $this->language->id == config('laravel-db-language.defaultLanguageId')) {
+        if ($value->value === "$group::$name" && $this->language->id == config('laravel-db-language.defaultLanguageId')) {
             $this->createConstantForFirstLanguage($group, $name, $constantValue);
 
             return $constantValue;
         }
 
-        return $value['value'];
+        return $value->value;
     }
-
-
-    /**
-     * @param $languageId
-     * @param $constantGroup
-     * @return mixed
-     */
-    private function loadConstants($languageId, $constantGroup = null)
-    {
-        $where = [];
-        if ($constantGroup) {
-            $where = ['group' => $constantGroup];
-        }
-
-        $constantsIds = Constant::where($where)->pluck('id')->all();
-
-        $constantValues = Value::with('constant')
-            ->where('language_id', $languageId)
-            ->whereIn('constant_id', $constantsIds)
-            ->get();
-
-        $constantValues = $this->parseValuesCollection($constantValues);
-
-        return $constantValues;
-    }
-
 
     /**
      * @param $name
@@ -126,25 +115,6 @@ class DbLanguage
     }
 
     /**
-     * @param $constantValues
-     * @return Collection $result
-     */
-    private function parseValuesCollection($constantValues)
-    {
-        $result = collect([]);
-        foreach ($constantValues as $value) {
-            $value = [
-                'name' => $value->constant->name,
-                'group' => $value->constant->group,
-                'value' => $value->value
-            ];
-            $result->push($value);
-        }
-
-        return $result;
-    }
-
-    /**
      * @param $group
      * @param $name
      * @return string
@@ -152,15 +122,15 @@ class DbLanguage
     private function findByGroupAndName($group, $name)
     {
         if (!$this->values) {
-            return ['value' => "$group::$name"];
+            return (object)['value' => "$group::$name"];
         }
 
         $value = $this->values->search(function ($item) use ($group, $name) {
-            return $item['group'] == $group && $item['name'] == $name;
+            return $item->group == $group && $item->group_name == $name;
         });
 
         if ($value === false) {
-            return ['value' => "$group::$name"];
+            return (object)['value' => "$group::$name"];
         }
 
         return $this->values[$value];
@@ -187,7 +157,7 @@ class DbLanguage
             ]
         );
 
-        $this->values->push(['group' => $group, 'name' => $name, 'value' => $constantValue]);
+        $this->values->push((object)['group' => $group, 'group_name' => $name, 'value' => $constantValue]);
 
         return $value;
     }
