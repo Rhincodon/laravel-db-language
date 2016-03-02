@@ -19,7 +19,6 @@ class DBLanguageTest extends TestCase
     {
         db_language()->load($this->languages[0]->id);
 
-        $this->assertInstanceOf("Rhinodontypicus\\DBLanguage\\Models\\Language", db_language()->language());
         $this->assertEquals($this->languages[0]->id, db_language()->language('id'));
     }
 
