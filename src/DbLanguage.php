@@ -2,8 +2,7 @@
 
 namespace Rhinodontypicus\DBLanguage;
 
-use Illuminate\Database\Eloquent\Collection;
-use Psy\Exception\ErrorException;
+use Illuminate\Support\Collection;
 use Rhinodontypicus\DBLanguage\Models\Constant;
 use Rhinodontypicus\DBLanguage\Models\Value;
 
@@ -20,6 +19,21 @@ class DbLanguage
     protected $values;
 
     /**
+     * @var DbLanguageRepository
+     */
+    protected $repository;
+
+    /**
+     * DbLanguage constructor.
+     *
+     * @param DbLanguageRepository $repository
+     */
+    public function __construct(DbLanguageRepository $repository)
+    {
+        $this->repository = $repository;
+    }
+
+    /**
      * Load language constants with values by languageId and group
      *
      * @param      $languageId
@@ -28,24 +42,10 @@ class DbLanguage
      */
     public function load($languageId, $constantGroup = null)
     {
-        $query = \DB::table('languages')
-            ->where('languages.id', $languageId)
-            ->leftJoin('language_constant_values', 'languages.id', '=', 'language_constant_values.language_id')
-            ->leftJoin('language_constants', 'language_constant_values.constant_id', '=', 'language_constants.id')
-            ->select('languages.*', 'language_constant_values.value', 'language_constants.group', 'language_constants.name as group_name');
+        $languageValues = $this->repository->getValues($languageId, $constantGroup);
 
-        if ($constantGroup) {
-            $query->where('language_constants.group', $constantGroup);
-        }
-
-        $data = $query->get();
-
-        if (!$data) {
-            return false;
-        }
-
-        $this->language = $data[0];
-        $this->values = collect($data);
+        $this->language = $languageValues->first();
+        $this->values = $languageValues;
         return true;
     }
 
