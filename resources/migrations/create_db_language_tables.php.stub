@@ -17,6 +17,8 @@ class CreateDbLanguageTables extends Migration
             $table->string('name');
             $table->string('group')->nullable();
             $table->softDeletes();
+
+            $table->unique(['name', 'group']);
         });
 
         Schema::create('languages', function (Blueprint $table) {
@@ -40,6 +42,8 @@ class CreateDbLanguageTables extends Migration
                   ->onUpdate('cascade')->onDelete('cascade');
 
             $table->text('value')->nullable();
+
+            $table->unique(['constant_id', 'language_id']);
         });
     }
 

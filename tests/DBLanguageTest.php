@@ -2,6 +2,8 @@
 
 namespace Rhinodontypicus\DBLanguage\Test;
 
+use Rhinodontypicus\DBLanguage\Exceptions\LanguageNotFoundException;
+
 class DBLanguageTest extends TestCase
 {
     /**
@@ -92,5 +94,15 @@ class DBLanguageTest extends TestCase
             "name"  => "const",
             "group" => "site",
         ]);
+    }
+
+    /**
+     * @test
+     */
+    public function it_throws_and_exception_if_language_does_not_exists()
+    {
+        $this->setExpectedException(LanguageNotFoundException::class);
+
+        db_language()->load(3);
     }
 }
